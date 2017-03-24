@@ -7,4 +7,12 @@ public class ApplicationUtils {
     public static MainApp mainApp;
 
     private ApplicationUtils(){};
+
+    public static MainApp getMainApp() {
+        return mainApp;
+    }
+
+    public static void setMainApp(MainApp mainApp) {
+        ApplicationUtils.mainApp = mainApp;
+    }
 }

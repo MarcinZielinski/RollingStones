@@ -22,24 +22,10 @@ public class MapDot {
     }
 
     public String getId() {
-        return id;
+        return device.getId();
     }
 
-    public long getLat() {
-        return lat;
-    }
 
-    public void setLat(long lat) {
-        this.lat = lat;
-    }
-
-    public long getLon() {
-        return lon;
-    }
-
-    public void setLon(long lon) {
-        this.lon = lon;
-    }
     public MapMarker getMarker() {
         return marker;
     }

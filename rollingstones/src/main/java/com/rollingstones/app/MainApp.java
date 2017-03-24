@@ -1,5 +1,6 @@
 package com.rollingstones.app;
 
+import com.rollingstones.app.map.Map;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.JMapViewerTree;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
@@ -38,7 +39,10 @@ public class MainApp extends JFrame implements JMapViewerEventListener {
         return this.treeMap.getViewer();
     }
     public static void main(String[] args) {
-        new MainApp().setVisible(true);
+        ApplicationUtils.setMainApp(new MainApp());
+        ApplicationUtils.getMainApp().setVisible(true);
+
+        new Map();
     }
 
     private void updateZoomParameters() {
