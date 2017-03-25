@@ -2,15 +2,8 @@ package com.rollingstones.app.map;
 
 import com.rollingstones.app.ApplicationUtils;
 import org.openstreetmap.gui.jmapviewer.*;
-import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
-import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
-
-import com.rollingstones.app.MainApp;
 
 /**
  * Created by Marcin on 2017-03-24.
@@ -24,6 +17,7 @@ public class Map {
     private HashMap<String,MapDot> mapDots;
     private double lineMaker = 0.000005;
     public  MapPolygonImpl poly;
+    public MapMarkerDot mapMarkerDot;
 
     public Map() {
         jMapViewer = new JMapViewer();
@@ -38,7 +32,7 @@ public class Map {
     }
 
     public void updateDevice(Device device) {
-        MapMarkerDot mapMarkerDot = new MapMarkerDot(krakowLayer,"",device.getLat(),device.getLon());
+        mapMarkerDot = new MapMarkerDot(krakowLayer,"",device.getLat(),device.getLon());
         MapDot mapDot = mapDots.get(device.getId());
         if(mapDot == null) {
             mapDot = new MapDot(device, mapMarkerDot);

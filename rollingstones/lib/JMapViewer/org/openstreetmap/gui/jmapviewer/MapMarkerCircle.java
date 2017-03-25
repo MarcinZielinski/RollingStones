@@ -1,14 +1,9 @@
 // License: GPL. For details, see Readme.txt file.
 package org.openstreetmap.gui.jmapviewer;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
+
+import java.awt.*;
 
 /**
  * A simple implementation of the {@link MapMarker} interface. Each map marker
@@ -22,7 +17,16 @@ public class MapMarkerCircle extends MapObjectImpl implements MapMarker {
 
     private Coordinate coord;
     private double radius;
+    private Point position;
     private STYLE markerStyle;
+
+
+
+    public Point getPosition() {
+        return position;
+    }
+
+
 
     /**
      * Constructs a new {@code MapMarkerCircle}.
@@ -131,8 +135,12 @@ public class MapMarkerCircle extends MapObjectImpl implements MapMarker {
         int sizeH = radius;
         int size = sizeH * 2;
 
+        this.position = position;
+
+
         if (g instanceof Graphics2D && getBackColor() != null) {
             Graphics2D g2 = (Graphics2D) g;
+
             Composite oldComposite = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
             g2.setPaint(getBackColor());
