@@ -23,7 +23,7 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
 
     ScrollList() {
         super("Devices");
-        setSize(300, 400);
+        setBounds(1620,0,300,1050);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         showButton = new JButton("Show");
         showButton.setEnabled(false);
@@ -31,34 +31,31 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
         //this.map = map;
         this.setVisible(false);
 
+        deviceList = new String[ApplicationUtils.getMainApp().getMap().getHashes().keySet().size()];
+        int i=0;
 
+        for(String t : ApplicationUtils.getMainApp().getMap().getHashes().values()){
+            deviceList[i]=Integer.toString(t.hashCode());
+            deviceList[i]=deviceList[i] + ", " + ApplicationUtils.getMainApp().getMap().getMacsStatistics().get(t)[0];
+            i++;
+        }
+        list = new JList(deviceList);
 
+        list.addListSelectionListener(this);
 
 
         //ListModel listModel = new DefaultListModel();
 
 
-
+        showList(ApplicationUtils.getMainApp().getMap());
 
     }
-
     void showList(Map map){
         this.map = map;
-        deviceList = new String[map.getHashes().keySet().size()];
-        int i=0;
-
-        for(String t : map.getHashes().values()){
-            deviceList[i]=Integer.toString(t.hashCode());
-            deviceList[i]=deviceList[i] + ", " + map.getMacsStatistics().get(t)[0];
-            i++;
-        }
 
         //deviceList = map.getHashes().keySet().stream().mapToInt(v->v).toArray();
         //list = new JList(Arrays.stream(deviceList).boxed().collect(Collectors.toList()).toArray());
-        list = new JList(deviceList);
         scrollpane = new JScrollPane(list);
-        list.addListSelectionListener(this);
-
 
         getContentPane().add(scrollpane, BorderLayout.CENTER);
         getContentPane().add(showButton,BorderLayout.SOUTH);
@@ -68,8 +65,6 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
     public void mouseClicked(MouseEvent e) {
         int index = list.getSelectedIndex();
         map.simulate(Integer.parseInt(deviceList[index].split(",")[0]));
-
-
     }
 
     @Override

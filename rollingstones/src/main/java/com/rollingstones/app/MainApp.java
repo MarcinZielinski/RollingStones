@@ -50,7 +50,6 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         infoPanel = new InfoPanel();
         map.add(infoPanel);
 
-        list = new ScrollList();
 
         infoPanel.setLocation(0,0);
         infoPanel.getComponent(0).setLocation(70,0);
@@ -65,6 +64,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         mapElements.calculateHashes();
 
         infoPanel.setCountOfDevices(mapElements.countDevices());
+        //list = new ScrollList();
+
     }
     public JMapViewer map() {
         return this.map;
@@ -100,8 +101,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         }
 
         if(((MapMarkerDot)(map().getMapMarkerList().get(0))).contains(e.getX(),e.getY())||((MapMarkerDot)(map().getMapMarkerList().get(1))).contains(e.getX(),e.getY())){ // node 1
-
-            list.showList(mapElements);
+            list = new ScrollList();
+            //list.showList(mapElements);
             list.setVisible(true);
         }
 

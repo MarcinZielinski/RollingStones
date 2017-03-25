@@ -8,12 +8,11 @@ import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 
 import javax.swing.*;
+import java.util.Timer;
 import javax.xml.crypto.Data;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 import com.rollingstones.app.MainApp;
 
@@ -66,31 +65,40 @@ public class Map {
     public void simulate(int hash) {
         double scale = 1/40.0;
         ArrayList<String[]> arrayOfArray = macs.get(hashes.get(hash));
+        int i =0;
         for (String[] s : arrayOfArray) {
-            Runnable task = () -> {
-                SwingUtilities.invokeLater(() -> {
-                    int signal = -Integer.parseInt(s[1]); // eg. +80
-                    double place = (signal-50)*scale;   // eg. 16/40.0
-                    Coordinate c;
-                    if(s[0].equals("P4cK8VRy2L7nHS3m")) {
-                        c=estimateCoord(50.021231D, 19.886560D,50.020984D, 19.885857D,place);
-                    } else {
-                        c=estimateCoord(50.020984D, 19.885857D,50.021231D, 19.886560D,place);
-                    }
+            new Timer().schedule(
+                    new TimerTask() {
+                        @Override
+                        public void run() {SwingUtilities.invokeLater(() -> {
+                            int signal = -Integer.parseInt(s[1]); // eg. +80
+                            double place = (signal-50)*scale;   // eg. 16/40.0
+//                            if(s[0].equals("P4cK8VRy2L7nHS3m")) {
+//                                place = signal/100.0;
+//                            } else {
+//                                place = 1 - signal/100.0;
+//                            }
+                            Coordinate c;
+                            if(s[0].equals("P4cK8VRy2L7nHS3m")) {
+                                c=estimateCoord(50.021231D, 19.886560D,50.020984D, 19.885857D,place);
+                            } else {
+                                c=estimateCoord(50.020984D, 19.885857D,50.021231D, 19.886560D,place);
+                            }
 
-                    simulateMarker(c.getLat(),c.getLon());
-                });
-            };
-            new Thread(task).start();
+                            simulateMarker(c.getLat(),c.getLon());
+                        });
+
+                        }
+                    }, i+=20);
         }
         if(simulateMarker!=null) {
-        //    ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
+            ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
         }
     }
     private MapMarkerDot simulateMarker;
     private void simulateMarker(double lat, double lon) {
         if(simulateMarker != null) {
-       //     ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
+            ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
         }
         simulateMarker = new MapMarkerDot(lat,lon);
         simulateMarker.setBackColor(Color.BLACK);
@@ -104,7 +112,7 @@ public class Map {
         double b = Math.abs(lon2-lon1_bound);
         double c = Math.sqrt(a*a+b*b);
         double d = distance * c;
-        double x = d * a/c;
+        double x = d*a/c;
         double y = b*d/c;
 
         double newlat = lat1_bound<lat2? lat1_bound + x : lat2 + x;
