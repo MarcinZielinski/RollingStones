@@ -18,22 +18,45 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
     JButton showButton;
     JList list;
     Map map;
+    String[] deviceList;
 
-    public ScrollList(Map map, String s) {
-        super("JScrollPane Demonstration");
-        setSize(300, 200);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+    public ScrollList() {
+        super("Devices");
+        setSize(300, 400);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
         showButton = new JButton("Show");
         showButton.setEnabled(false);
+        showButton.addMouseListener(this);
         this.map = map;
 
 
 
-        ListModel listModel = new DefaultListModel();
 
-        Integer deviceList[] = {1,568,848,8442};
+
+        //ListModel listModel = new DefaultListModel();
+
+
+
+
+    }
+
+    public void showList(Map map){
+
+        deviceList = new String[map.getHashes().keySet().size()];
+        int i=0;
+
+        for(String t : map.getHashes().values()){
+            deviceList[i]=Integer.toString(t.hashCode());
+            deviceList[i]=deviceList[i] + ", " + map.getMacsStatistics().get(t)[0];
+            i++;
+        }
+
+        //deviceList = map.getHashes().keySet().stream().mapToInt(v->v).toArray();
+        //list = new JList(Arrays.stream(deviceList).boxed().collect(Collectors.toList()).toArray());
         list = new JList(deviceList);
         scrollpane = new JScrollPane(list);
+        list.addListSelectionListener(this);
 
 
         getContentPane().add(scrollpane, BorderLayout.CENTER);
@@ -42,6 +65,9 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        int index = list.getSelectedIndex();
+        map.simulate(Integer.parseInt(deviceList[index].split(",")[0]));
+
 
     }
 

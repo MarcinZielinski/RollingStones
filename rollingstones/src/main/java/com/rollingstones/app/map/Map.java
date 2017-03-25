@@ -33,7 +33,19 @@ public class Map {
     public  MapPolygonImpl poly; //TODO: to stash
     public MapMarkerDot mapMarkerDot;
     private DataHandler dataHandler;
-    private HashMap<Integer, String> hashes;
+    private HashMap<Integer,String> hashes;
+
+    public HashMap<String, Object[]> getMacsStatistics() {
+        return macsStatistics;
+    }
+
+    public HashMap<Integer,String> getHashes() {
+        return hashes;
+    }
+
+    public HashMap<String, ArrayList<String[]>> getMacs() {
+        return macs;
+    }
 
     public Map() {
         jMapViewer = new JMapViewer();
@@ -42,10 +54,12 @@ public class Map {
         mapDots = new HashMap<String, MapDot>();
         macsStatistics = new HashMap<>();
         macs = new HashMap<>();
+        hashes = new HashMap<>();
 
         updateDevice(new Device("123123",50.021231D, 19.886560D)); // Hacknarok room
         updateDevice(new Device("1231233",50.020984D, 19.885857D)); // Game room
         drawLine(mapDots.get("123123").getDevice(),mapDots.get("1231233").getDevice());
+
     }
 
     public void simulate(int hash) {
@@ -195,5 +209,11 @@ public class Map {
 
         String[] a = new String[]{device,signal,date};
         arrayOfArrays.add(a);
+    }
+
+    public void calculateHashes() {
+        for (String s : macs.keySet()) {
+            hashes.put(s.hashCode(),s);
+        }
     }
 }

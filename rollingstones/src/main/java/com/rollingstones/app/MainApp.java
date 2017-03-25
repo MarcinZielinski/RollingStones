@@ -28,6 +28,9 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
     private InfoPanel infoPanel;
     private Map mapElements;
     private DataHandler dataHandler;
+    private ScrollList list;
+
+
 
     public Map getMap() {
         return mapElements;
@@ -47,6 +50,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         infoPanel = new InfoPanel();
         map.add(infoPanel);
 
+        list = new ScrollList();
+        list.setVisible(true);
 
         infoPanel.setLocation(0,0);
         infoPanel.getComponent(0).setLocation(70,0);
@@ -58,6 +63,7 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         mapElements = new Map();
         this.dataHandler = new DataHandler();
         this.dataHandler.run();
+        mapElements.calculateHashes();
 
         infoPanel.setCountOfDevices(mapElements.countDevices());
     }
@@ -68,12 +74,12 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         ApplicationUtils.setMainApp(new MainApp());
         ApplicationUtils.getMainApp().setVisible(true);
         ApplicationUtils.getMainApp().run();
-        //ScrollList list = new ScrollList();
-        //list.setVisible(true);
+
 
         //Map map = new Map();
         poly = ApplicationUtils.getMainApp().getMap().poly;
         ApplicationUtils.getMainApp().mapMarkerDot= ApplicationUtils.getMainApp().getMap().mapMarkerDot;
+
 
 
 
@@ -101,10 +107,13 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
             infoPanel.setVisible(true);
 
         }
-        if(mapMarkerDot.contains(e.getX(),e.getY())){
-            infoPanel.setLocation(e.getX(),e.getY());
-            infoPanel.revalidate();
-            infoPanel.repaint();
+        ;
+        map().getMapMarkerList().get(0);
+
+        if(((MapMarkerDot)(map().getMapMarkerList().get(0))).contains(e.getX(),e.getY())){ // node 1
+
+            list.showList(mapElements);
+            list.setVisible(true);
         }
 
     }
