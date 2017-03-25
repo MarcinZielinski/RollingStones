@@ -1,5 +1,7 @@
 package com.rollingstones.app.map;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+
 /**
  * Created by Marcin on 2017-03-24.
  */

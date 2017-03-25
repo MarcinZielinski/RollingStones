@@ -6,7 +6,9 @@ import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 
 import com.rollingstones.app.MainApp;
 
@@ -20,7 +22,7 @@ public class Map {
     private LayerGroup krakowGroup;
     private Layer krakowLayer;
     private HashMap<String,MapDot> mapDots;
-
+    private double lineMaker = 0.000005;
 
     public Map() {
         jMapViewer = new JMapViewer();
@@ -29,6 +31,8 @@ public class Map {
         mapDots = new HashMap<String, MapDot>();
 
         updateDevice(new Device("123123",50.00D,19.00D)); // test marker
+        updateDevice(new Device("1231233",50.05D,19.19D)); // test marker
+        drawLine(mapDots.get("123123").getDevice(),mapDots.get("1231233").getDevice());
     }
 
     public void updateDevice(Device device) {
@@ -41,5 +45,14 @@ public class Map {
         }
         mapDots.put(device.getId(),mapDot); // replaces old MapDot or creates new one
         ApplicationUtils.getMainApp().map().addMapMarker(mapMarkerDot);
+    }
+
+    private void drawLine(Device d1, Device d2) {
+        MapPolygonImpl mapPolygon = new MapPolygonImpl(krakowLayer,"line",new Coordinate[] {
+                new Coordinate(d1.getLat()-lineMaker,d1.getLon()), new Coordinate(d2.getLat()-lineMaker,d2.getLon()),
+                new Coordinate(d2.getLat()+lineMaker,d2.getLon()), new Coordinate(d1.getLat()+lineMaker,d1.getLon())
+        });
+        mapPolygon.setBackColor(mapPolygon.getColor());
+        ApplicationUtils.getMainApp().map().addMapPolygon(mapPolygon);
     }
 }
