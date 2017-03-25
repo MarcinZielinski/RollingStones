@@ -19,7 +19,7 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
     JList list;
     Map map;
 
-    public ScrollList(Map map, String) {
+    public ScrollList(Map map, String s) {
         super("JScrollPane Demonstration");
         setSize(300, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

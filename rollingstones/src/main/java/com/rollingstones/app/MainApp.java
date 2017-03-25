@@ -1,7 +1,6 @@
 package com.rollingstones.app;
 
 import com.rollingstones.app.data.DataHandler;
-import com.rollingstones.app.map.Line;
 import com.rollingstones.app.map.InfoPanel;
 import com.rollingstones.app.map.Map;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
@@ -49,7 +48,6 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         map.add(infoPanel);
 
 
-
         infoPanel.setLocation(0,0);
         infoPanel.getComponent(0).setLocation(70,0);
         infoPanel.getComponent(0).setSize(30,30);
@@ -61,7 +59,7 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         this.dataHandler = new DataHandler();
         this.dataHandler.run();
 
-        mapElements.countDevices();
+        infoPanel.setCountOfDevices(mapElements.countDevices());
     }
     public JMapViewer map() {
         return this.map;
@@ -70,11 +68,11 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         ApplicationUtils.setMainApp(new MainApp());
         ApplicationUtils.getMainApp().setVisible(true);
         ApplicationUtils.getMainApp().run();
-        ScrollList list = new ScrollList();
-        list.setVisible(true);
+        //ScrollList list = new ScrollList();
+        //list.setVisible(true);
 
         //Map map = new Map();
-        //poly = map.poly;
+        poly = ApplicationUtils.getMainApp().getMap().poly;
         ApplicationUtils.getMainApp().mapMarkerDot= ApplicationUtils.getMainApp().getMap().mapMarkerDot;
 
 
