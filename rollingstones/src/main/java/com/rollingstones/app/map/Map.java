@@ -33,7 +33,7 @@ public class Map {
     public  MapPolygonImpl poly; //TODO: to stash
     public MapMarkerDot mapMarkerDot;
     private DataHandler dataHandler;
-
+    private HashMap<Integer, String> hashes;
 
     public Map() {
         jMapViewer = new JMapViewer();
@@ -46,16 +46,46 @@ public class Map {
         updateDevice(new Device("123123",50.021231D, 19.886560D)); // Hacknarok room
         updateDevice(new Device("1231233",50.020984D, 19.885857D)); // Game room
         drawLine(mapDots.get("123123").getDevice(),mapDots.get("1231233").getDevice());
-
     }
 
-    public void simulate(String mac) {
-
+    public void simulate(int hash) {
+        double scale = 1/60.0;
+        ArrayList<String[]> arrayOfArray = macs.get(hashes.get(hash));
+        for (String[] s : arrayOfArray) {
+            int signal = -Integer.parseInt(s[1]); // eg. +80
+            double place = (signal-30)*scale;   // eg. 16/40.0
+            Coordinate c;
+            if(s[0].equals("P4cK8VRy2L7nHS3m")) {
+                c=estimateCoord(50.021231D, 19.886560D,50.020984D, 19.885857D,place);
+            } else {
+                c=estimateCoord(50.020984D, 19.885857D,50.021231D, 19.886560D,place);
+            }
+            simulateMarker(c.getLat(),c.getLon());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if(simulateMarker!=null) {
+            ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
+        }
+    }
+    private MapMarkerDot simulateMarker;
+    private void simulateMarker(double lat, double lon) {
+        if(simulateMarker != null) {
+            ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
+        }
+        simulateMarker = new MapMarkerDot(lat,lon);
+        ApplicationUtils.getMainApp().map().addMapMarker(simulateMarker);
     }
 
-    private Coordinate estimateCoord(Device d1, Device d2) {
-        return null;
+    private Coordinate estimateCoord(double lat1_bound,double lon1_bound, double lat2, double lon2, double distance) {
+        Coordinate middlePoint = new Coordinate((lat1_bound+lat2)/2.0,(lon1_bound+lon2)/2.0);
+        return new Coordinate((lat1_bound+middlePoint.getLat())*distance,(lon1_bound+middlePoint.getLon())*distance);
     }
+    //private Coordinate estimateCoord(Device d1, Device d2, place); // a real-future prototype for this method
+
 
     public int countDevices() {
         Set<String> allMacs = macs.keySet();
