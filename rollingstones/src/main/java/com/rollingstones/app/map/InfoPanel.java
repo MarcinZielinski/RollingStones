@@ -22,7 +22,7 @@ public class InfoPanel extends JPanel implements MouseListener {
 
     public InfoPanel(){
         this.setBackground(Color.DARK_GRAY);
-        this.setSize(100,50);
+        this.setSize(120,50);
         this.setLayout(new MigLayout());
         initButton();
         JLabel devices = new JLabel("Devices: ");

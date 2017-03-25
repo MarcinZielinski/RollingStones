@@ -3,18 +3,10 @@ package com.rollingstones.app.map;
 import com.rollingstones.app.ApplicationUtils;
 import com.rollingstones.app.data.DataHandler;
 import org.openstreetmap.gui.jmapviewer.*;
-import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
-import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 
-import javax.swing.*;
-import javax.xml.crypto.Data;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
-
-import com.rollingstones.app.MainApp;
 
 /**
  * Created by Marcin on 2017-03-24.
@@ -33,7 +25,19 @@ public class Map {
     public  MapPolygonImpl poly; //TODO: to stash
     public MapMarkerDot mapMarkerDot;
     private DataHandler dataHandler;
+    private HashMap<Integer,String> hashes;
 
+    public HashMap<String, Object[]> getMacsStatistics() {
+        return macsStatistics;
+    }
+
+    public HashMap<Integer,String> getHashes() {
+        return hashes;
+    }
+
+    public HashMap<String, ArrayList<String[]>> getMacs() {
+        return macs;
+    }
 
     public Map() {
         jMapViewer = new JMapViewer();
@@ -42,6 +46,7 @@ public class Map {
         mapDots = new HashMap<String, MapDot>();
         macsStatistics = new HashMap<>();
         macs = new HashMap<>();
+        hashes = new HashMap<>();
 
         updateDevice(new Device("123123",50.021231D, 19.886560D)); // Hacknarok room
         updateDevice(new Device("1231233",50.020984D, 19.885857D)); // Game room
@@ -49,7 +54,7 @@ public class Map {
 
     }
 
-    public void simulate(String mac) {
+    public void simulate(int hashCode) {
 
     }
 
@@ -165,5 +170,11 @@ public class Map {
 
         String[] a = new String[]{device,signal,date};
         arrayOfArrays.add(a);
+    }
+
+    public void calculateHashes() {
+        for (String s : macs.keySet()) {
+            hashes.put(s.hashCode(),s);
+        }
     }
 }
