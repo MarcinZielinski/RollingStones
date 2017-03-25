@@ -91,12 +91,16 @@ public class Map {
             ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
         }
         simulateMarker = new MapMarkerDot(lat,lon);
+        simulateMarker.setColor(Color.GREEN);
         ApplicationUtils.getMainApp().map().addMapMarker(simulateMarker);
+        ApplicationUtils.getMainApp().map().repaint();
     }
 
     private Coordinate estimateCoord(double lat1_bound,double lon1_bound, double lat2, double lon2, double distance) {
         Coordinate middlePoint = new Coordinate((lat1_bound+lat2)/2.0,(lon1_bound+lon2)/2.0);
-        return new Coordinate((lat1_bound+middlePoint.getLat())*distance,(lon1_bound+middlePoint.getLon())*distance);
+        double newlat = (lat1_bound+middlePoint.getLat())*distance;
+        double newlon = (lon1_bound+middlePoint.getLon())*distance;
+        return new Coordinate(newlat,newlon);
     }
     //private Coordinate estimateCoord(Device d1, Device d2, place); // a real-future prototype for this method
 

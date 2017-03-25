@@ -42,7 +42,7 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
     }
 
     public void showList(Map map){
-
+        this.map = map;
         deviceList = new String[map.getHashes().keySet().size()];
         int i=0;
 
