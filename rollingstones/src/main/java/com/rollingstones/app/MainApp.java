@@ -1,5 +1,6 @@
 package com.rollingstones.app;
 
+import com.rollingstones.app.data.DataHandler;
 import com.rollingstones.app.map.Line;
 import com.rollingstones.app.map.Map;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
@@ -8,6 +9,7 @@ import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,6 +24,12 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
     private final JLabel mperpLabelName;
     private final JLabel mperpLabelValue;*/
     public static MapPolygonImpl poly;
+    private Map mapElements;
+    private DataHandler dataHandler;
+
+    public Map getMap() {
+        return mapElements;
+    }
 
     public MainApp(){
         super("RollingStones");
@@ -34,7 +42,16 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         //JPanel panel = new JPanel(new BorderLayout());
         map.addMouseListener(this);
 
+
+
         this.add(this.map, "Center");
+    }
+    private void run() {
+        mapElements = new Map();
+        this.dataHandler = new DataHandler();
+        this.dataHandler.run();
+
+        mapElements.countDevices();
     }
     public JMapViewer map() {
         return this.map;
@@ -42,10 +59,7 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
     public static void main(String[] args) {
         ApplicationUtils.setMainApp(new MainApp());
         ApplicationUtils.getMainApp().setVisible(true);
-
-        Map map = new Map();
-        poly = map.poly;
-
+        ApplicationUtils.getMainApp().run();
     }
 
     private void updateZoomParameters() {
