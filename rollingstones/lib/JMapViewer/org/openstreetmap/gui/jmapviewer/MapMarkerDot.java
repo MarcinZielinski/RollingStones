@@ -1,9 +1,9 @@
 // License: GPL. For details, see Readme.txt file.
 package org.openstreetmap.gui.jmapviewer;
 
-import java.awt.Color;
-
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
+
+import java.awt.*;
 
 /**
  * A simple implementation of the {@link MapMarker} interface. Each map marker
@@ -52,6 +52,14 @@ public class MapMarkerDot extends MapMarkerCircle {
 
     public MapMarkerDot(Layer layer, String name, Coordinate coord, Style style) {
         super(layer, name, coord, DOT_RADIUS, STYLE.FIXED, style);
+    }
+
+    public boolean contains(int x, int y){
+        double xP = this.getPosition().getX();
+        double yP = this.getPosition().getY();
+        double radius = this.getRadius();
+        if(x>=(int)(xP-radius)&&x<=Math.ceil(xP+radius)&&y>=(int)(yP-radius)&&y<=Math.ceil(yP+radius)) return true;
+        else return false;
     }
 
     public static Style getDefaultStyle() {

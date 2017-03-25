@@ -26,10 +26,12 @@ public class Map {
     private LayerGroup krakowGroup;
     private Layer krakowLayer;
     private HashMap<String,MapDot> mapDots;
-    private HashMap<Line,Polygon> lines;
+    //private HashMap<Line,Polygon> lines;
     private HashMap<String,ArrayList<String[]>> macs; // phone mac, list<device, signal, date>
     private HashMap<String,Object[]> macsStatistics; // how many times moved,
     private double lineMaker = 0.000005;
+    public  MapPolygonImpl poly; //TODO: to stash
+    public MapMarkerDot mapMarkerDot;
     private DataHandler dataHandler;
 
 
@@ -55,10 +57,10 @@ public class Map {
         return null;
     }
 
-    public void countDevices() {
+    public int countDevices() {
         Set<String> allMacs = macs.keySet();
         allMacs.forEach(this::checkSignal);
-        //System.out.println(macsStatistics.values().stream().filter(v->(int)v[0]>1).count());
+        return macsStatistics.values().stream().filter(v->(int)v[0]>1).mapToInt(v->(int)v[0]).sum();
     }
     void checkSignal(String mac) {
         ArrayList<String[]> arrayOfArrays = macs.get(mac);
@@ -131,7 +133,7 @@ public class Map {
     }
 
     public void updateDevice(Device device) {
-        MapMarkerDot mapMarkerDot = new MapMarkerDot(krakowLayer,"",device.getLat(),device.getLon());
+        mapMarkerDot = new MapMarkerDot(krakowLayer,"",device.getLat(),device.getLon());
         MapDot mapDot = mapDots.get(device.getId());
         if(mapDot == null) {
             mapDot = new MapDot(device, mapMarkerDot);
@@ -148,7 +150,7 @@ public class Map {
                 new Coordinate(d2.getLat()+lineMaker,d2.getLon()), new Coordinate(d1.getLat()+lineMaker,d1.getLon())
         });
         mapPolygon.setBackColor(mapPolygon.getColor());
-
+        this.poly = mapPolygon; //TODO: why I deleted this?
         ApplicationUtils.getMainApp().map().addMapPolygon(mapPolygon);
     }
 

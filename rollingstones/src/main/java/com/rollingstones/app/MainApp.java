@@ -2,14 +2,15 @@ package com.rollingstones.app;
 
 import com.rollingstones.app.data.DataHandler;
 import com.rollingstones.app.map.Line;
+import com.rollingstones.app.map.InfoPanel;
 import com.rollingstones.app.map.Map;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
+import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,6 +25,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
     private final JLabel mperpLabelName;
     private final JLabel mperpLabelValue;*/
     public static MapPolygonImpl poly;
+    MapMarkerDot mapMarkerDot;
+    private InfoPanel infoPanel;
     private Map mapElements;
     private DataHandler dataHandler;
 
@@ -42,9 +45,16 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         //JPanel panel = new JPanel(new BorderLayout());
         map.addMouseListener(this);
 
+        infoPanel = new InfoPanel();
+        map.add(infoPanel);
 
 
+
+        infoPanel.setLocation(0,0);
+        infoPanel.getComponent(0).setLocation(70,0);
+        infoPanel.getComponent(0).setSize(30,30);
         this.add(this.map, "Center");
+        this.pack();
     }
     private void run() {
         mapElements = new Map();
@@ -60,6 +70,17 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         ApplicationUtils.setMainApp(new MainApp());
         ApplicationUtils.getMainApp().setVisible(true);
         ApplicationUtils.getMainApp().run();
+        ScrollList list = new ScrollList();
+        list.setVisible(true);
+
+        //Map map = new Map();
+        //poly = map.poly;
+        ApplicationUtils.getMainApp().mapMarkerDot= ApplicationUtils.getMainApp().getMap().mapMarkerDot;
+
+
+
+
+
     }
 
     private void updateZoomParameters() {
@@ -75,8 +96,19 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
 
     public void mouseClicked(MouseEvent e) {
         if(poly.getPolygon().contains(e.getX(),e.getY())) {
-            System.out.println("line clicked");
+            infoPanel.setLocation(e.getX(),e.getY());
+            infoPanel.revalidate();
+            infoPanel.repaint();
+
+            infoPanel.setVisible(true);
+
         }
+        if(mapMarkerDot.contains(e.getX(),e.getY())){
+            infoPanel.setLocation(e.getX(),e.getY());
+            infoPanel.revalidate();
+            infoPanel.repaint();
+        }
+
     }
 
     public void mousePressed(MouseEvent e) {
