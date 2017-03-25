@@ -23,6 +23,7 @@ public class Map {
     private Layer krakowLayer;
     private HashMap<String,MapDot> mapDots;
     private double lineMaker = 0.000005;
+    public  MapPolygonImpl poly;
 
     public Map() {
         jMapViewer = new JMapViewer();
@@ -33,6 +34,7 @@ public class Map {
         updateDevice(new Device("123123",50.00D,19.00D)); // test marker
         updateDevice(new Device("1231233",50.05D,19.19D)); // test marker
         drawLine(mapDots.get("123123").getDevice(),mapDots.get("1231233").getDevice());
+
     }
 
     public void updateDevice(Device device) {
@@ -53,6 +55,7 @@ public class Map {
                 new Coordinate(d2.getLat()+lineMaker,d2.getLon()), new Coordinate(d1.getLat()+lineMaker,d1.getLon())
         });
         mapPolygon.setBackColor(mapPolygon.getColor());
+        this.poly = mapPolygon;
         ApplicationUtils.getMainApp().map().addMapPolygon(mapPolygon);
     }
 }
