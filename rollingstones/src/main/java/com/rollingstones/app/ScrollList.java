@@ -14,21 +14,22 @@ import java.awt.event.MouseListener;
  */
 public class ScrollList extends JFrame implements MouseListener,ListSelectionListener {
 
-    JScrollPane scrollpane;
-    JButton showButton;
-    JList list;
-    Map map;
-    String[] deviceList;
+    private JScrollPane scrollpane;
+    private JButton showButton;
+    private JList list;
+    private Map map;
+    private String[] deviceList;
 
 
-    public ScrollList() {
+    ScrollList() {
         super("Devices");
         setSize(300, 400);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         showButton = new JButton("Show");
         showButton.setEnabled(false);
         showButton.addMouseListener(this);
-        this.map = map;
+        //this.map = map;
+        this.setVisible(false);
 
 
 
@@ -41,8 +42,8 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
 
     }
 
-    public void showList(Map map){
-
+    void showList(Map map){
+        this.map = map;
         deviceList = new String[map.getHashes().keySet().size()];
         int i=0;
 

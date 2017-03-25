@@ -23,8 +23,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
     private final JLabel zoomValue;
     private final JLabel mperpLabelName;
     private final JLabel mperpLabelValue;*/
-    public static MapPolygonImpl poly;
-    MapMarkerDot mapMarkerDot;
+    private static MapPolygonImpl poly;
+    private MapMarkerDot mapMarkerDot;
     private InfoPanel infoPanel;
     private Map mapElements;
     private DataHandler dataHandler;
@@ -36,7 +36,7 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         return mapElements;
     }
 
-    public MainApp(){
+    private MainApp(){
         super("RollingStones");
         this.setSize(1920,1080);
         this.map=new JMapViewer();
@@ -51,7 +51,6 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         map.add(infoPanel);
 
         list = new ScrollList();
-        list.setVisible(true);
 
         infoPanel.setLocation(0,0);
         infoPanel.getComponent(0).setLocation(70,0);
@@ -75,16 +74,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
         ApplicationUtils.getMainApp().setVisible(true);
         ApplicationUtils.getMainApp().run();
 
-
-        //Map map = new Map();
         poly = ApplicationUtils.getMainApp().getMap().poly;
         ApplicationUtils.getMainApp().mapMarkerDot= ApplicationUtils.getMainApp().getMap().mapMarkerDot;
-
-
-
-
-
-
     }
 
     private void updateZoomParameters() {
@@ -107,10 +98,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener, MouseLis
             infoPanel.setVisible(true);
 
         }
-        ;
-        map().getMapMarkerList().get(0);
 
-        if(((MapMarkerDot)(map().getMapMarkerList().get(0))).contains(e.getX(),e.getY())){ // node 1
+        if(((MapMarkerDot)(map().getMapMarkerList().get(0))).contains(e.getX(),e.getY())||((MapMarkerDot)(map().getMapMarkerList().get(1))).contains(e.getX(),e.getY())){ // node 1
 
             list.showList(mapElements);
             list.setVisible(true);
