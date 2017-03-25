@@ -2,7 +2,6 @@ package com.rollingstones.app;
 
 import com.rollingstones.app.map.Map;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
-import org.openstreetmap.gui.jmapviewer.JMapViewerTree;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 
@@ -13,7 +12,7 @@ import java.awt.*;
  * Created by Somas3k on 24.03.2017.
  */
 public class MainApp extends JFrame implements JMapViewerEventListener {
-    private final JMapViewerTree treeMap;
+    private final JMapViewer map;
     /*private final JLabel zoomLabel;
     private final JLabel zoomValue;
     private final JLabel mperpLabelName;
@@ -23,8 +22,8 @@ public class MainApp extends JFrame implements JMapViewerEventListener {
     public MainApp(){
         super("RollingStones");
         this.setSize(1920,1080);
-        this.treeMap=new JMapViewerTree("Zones");
-        this.map().addJMVListener(this);
+        this.map=new JMapViewer();
+        this.map.addJMVListener(this);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setExtendedState(6);
@@ -32,11 +31,11 @@ public class MainApp extends JFrame implements JMapViewerEventListener {
 
 
 
-        this.add(this.treeMap, "Center");
+        this.add(this.map, "Center");
 
     }
     public JMapViewer map() {
-        return this.treeMap.getViewer();
+        return this.map;
     }
     public static void main(String[] args) {
         ApplicationUtils.setMainApp(new MainApp());
