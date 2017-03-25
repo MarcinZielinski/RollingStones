@@ -1,6 +1,7 @@
 package com.rollingstones.app;
 
 import com.rollingstones.app.map.Map;
+import javafx.application.Platform;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -67,8 +68,6 @@ public class ScrollList extends JFrame implements MouseListener,ListSelectionLis
     public void mouseClicked(MouseEvent e) {
         int index = list.getSelectedIndex();
         map.simulate(Integer.parseInt(deviceList[index].split(",")[0]));
-
-
     }
 
     @Override

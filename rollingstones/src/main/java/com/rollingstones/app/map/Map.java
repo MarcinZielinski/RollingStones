@@ -2,6 +2,7 @@ package com.rollingstones.app.map;
 
 import com.rollingstones.app.ApplicationUtils;
 import com.rollingstones.app.data.DataHandler;
+import javafx.application.Platform;
 import org.openstreetmap.gui.jmapviewer.*;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
@@ -63,43 +64,51 @@ public class Map {
     }
 
     public void simulate(int hash) {
-        double scale = 1/60.0;
+        double scale = 1/40.0;
         ArrayList<String[]> arrayOfArray = macs.get(hashes.get(hash));
         for (String[] s : arrayOfArray) {
-            int signal = -Integer.parseInt(s[1]); // eg. +80
-            double place = (signal-30)*scale;   // eg. 16/40.0
-            Coordinate c;
-            if(s[0].equals("P4cK8VRy2L7nHS3m")) {
-                c=estimateCoord(50.021231D, 19.886560D,50.020984D, 19.885857D,place);
-            } else {
-                c=estimateCoord(50.020984D, 19.885857D,50.021231D, 19.886560D,place);
-            }
-            simulateMarker(c.getLat(),c.getLon());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Runnable task = () -> {
+                SwingUtilities.invokeLater(() -> {
+                    int signal = -Integer.parseInt(s[1]); // eg. +80
+                    double place = (signal-50)*scale;   // eg. 16/40.0
+                    Coordinate c;
+                    if(s[0].equals("P4cK8VRy2L7nHS3m")) {
+                        c=estimateCoord(50.021231D, 19.886560D,50.020984D, 19.885857D,place);
+                    } else {
+                        c=estimateCoord(50.020984D, 19.885857D,50.021231D, 19.886560D,place);
+                    }
+
+                    simulateMarker(c.getLat(),c.getLon());
+                });
+            };
+            new Thread(task).start();
         }
         if(simulateMarker!=null) {
-            ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
+        //    ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
         }
     }
     private MapMarkerDot simulateMarker;
     private void simulateMarker(double lat, double lon) {
         if(simulateMarker != null) {
-            ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
+       //     ApplicationUtils.getMainApp().map().removeMapMarker(simulateMarker);
         }
         simulateMarker = new MapMarkerDot(lat,lon);
-        simulateMarker.setColor(Color.GREEN);
+        simulateMarker.setBackColor(Color.BLACK);
         ApplicationUtils.getMainApp().map().addMapMarker(simulateMarker);
         ApplicationUtils.getMainApp().map().repaint();
     }
 
     private Coordinate estimateCoord(double lat1_bound,double lon1_bound, double lat2, double lon2, double distance) {
         Coordinate middlePoint = new Coordinate((lat1_bound+lat2)/2.0,(lon1_bound+lon2)/2.0);
-        double newlat = (lat1_bound+middlePoint.getLat())*distance;
-        double newlon = (lon1_bound+middlePoint.getLon())*distance;
+        double a = Math.abs(lat2-lat1_bound);
+        double b = Math.abs(lon2-lon1_bound);
+        double c = Math.sqrt(a*a+b*b);
+        double d = distance * c;
+        double x = d * a/c;
+        double y = b*d/c;
+
+        double newlat = lat1_bound<lat2? lat1_bound + x : lat2 + x;
+        double newlon = lon1_bound<lon2? lat1_bound + y : lon2 + y;
         return new Coordinate(newlat,newlon);
     }
     //private Coordinate estimateCoord(Device d1, Device d2, place); // a real-future prototype for this method
