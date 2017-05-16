@@ -21,7 +21,7 @@ public class DataHandler implements Runnable {
     private List<String> list;
     private Map map;
 
-    private String dataPath = "res\\pliki.txt";
+    private String dataPath = "res\\wifi_traces.txt";
     public DataHandler() {
         this.map = ApplicationUtils.getMainApp().getMap();
         list = new CopyOnWriteArrayList<>();
